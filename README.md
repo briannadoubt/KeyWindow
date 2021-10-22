@@ -7,7 +7,7 @@ Convenience functions for magically accessing the key window's safe area and fra
 ```swift
 struct MyView: View {
     let phi: CGFloat = 0.61803398875 /// Golden Ratio: https://www.google.com/search?q=golden+ratio
-    ScrollView([.horizontal, .verticle]) {
+    ScrollView([.horizontal, .vertical]) {
         VStack {
             Text("Hello, world!").foregroundColor(.white)
         }
