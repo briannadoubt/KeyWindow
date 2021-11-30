@@ -1,6 +1,32 @@
 
 import SwiftUI
 
+#if canImport(AppKit)
+public extension View {
+    var safeAreaInsets: NSEdgeInsets {
+        NSApplication.shared.keyWindow?.contentView?.safeAreaInsets ?? NSEdgeInsets()
+    }
+    
+    var keyWindowFrame: CGRect {
+        NSApplication.shared.keyWindow?.frame ?? .zero
+    }
+
+    var keyWindowSafeAreaFrame: CGRect {
+        let frame = keyWindowFrame.insetBy(dx: safeAreaInsets.left + safeAreaInsets.right, dy: safeAreaInsets.top + safeAreaInsets.bottom)
+        return frame
+    }
+
+    var keyWindowTopSafeArea: CGFloat {
+        return safeAreaInsets.top
+    }
+    
+    var keyWindowBottomSafeArea: CGFloat {
+        return safeAreaInsets.bottom
+    }
+}
+#endif
+
+#if canImport(UIKit)
 public extension UIView {
     static func keyWindow() -> UIWindow? {
         return UIApplication.shared.connectedScenes
@@ -13,24 +39,25 @@ public extension UIView {
 }
 
 public extension View {
+    var safeAreaInsets: UIEdgeInsets {
+        UIView.keyWindow()?.safeAreaInsets ?? .zero
+    }
+    
+    var keyWindowFrame: CGRect {
+        UIScreen.main.bounds
+    }
 
     var keyWindowSafeAreaFrame: CGRect {
-        let safeAreaInsets = UIView.keyWindow()?.safeAreaInsets ?? .zero
         let frame = keyWindowFrame.inset(by: safeAreaInsets)
         return frame
     }
 
     var keyWindowTopSafeArea: CGFloat {
-        let safeAreaInsets = UIView.keyWindow()?.safeAreaInsets ?? .zero
         return safeAreaInsets.top
     }
     
     var keyWindowBottomSafeArea: CGFloat {
-        let safeAreaInsets = UIView.keyWindow()?.safeAreaInsets ?? .zero
         return safeAreaInsets.bottom
     }
-
-    var keyWindowFrame: CGRect {
-        UIScreen.main.bounds
-    }
 }
+#endif
